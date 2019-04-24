@@ -1,7 +1,9 @@
 # Motion-Sensor
 A small arduino project to detect movement of a person using a PIR sensor and alerting via a small buzzer and some flashing LEDs. For the LED indication, I decided to make the LEDs fade in and out, as opposed to On and Off. 
 
-![alt text](https://i.ibb.co/T0rxNvy/IMG-6251.jpg "It's not a bomb!")
+I added a button to toggle the sensor into silent mode, which is indicated by a green light when the device is in silent mode. This simply stops sounds. 
+
+![alt text](https://i.ibb.co/jy55sTD/IMG-6252.jpg "It's not a bomb!")
 
 Note: my PIR sensor is set that, when there's movement, it stays active for a few seconds after the movement stops. Some return true when the movement stops. Mine has a delay. This can be changed, but you need some l33t soldering skills, or one with jumpers. 
 
@@ -27,4 +29,4 @@ I use the following pins:
 
 ### The Sketch.
 
-![alt text](https://i.ibb.co/CHRChKH/Motion-Sensor-No-Screen-bb.jpg "High quality")
+![alt text](https://i.ibb.co/HFVdrcj/Motion-Sensor-No-Screen-bb.jpg "High quality")
