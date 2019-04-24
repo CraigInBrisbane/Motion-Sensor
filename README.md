@@ -1,2 +1,30 @@
 # Motion-Sensor
-A small arduino project to monitor movement using a PIR sensor.
+A small arduino project to detect movement of a person using a PIR sensor and alerting via a small buzzer and some flashing LEDs. For the LED indication, I decided to make the LEDs fade in and out, as opposed to On and Off. 
+
+![alt text](https://i.ibb.co/T0rxNvy/IMG-6251.jpg "It's not a bomb!")
+
+Note: my PIR sensor is set that, when there's movement, it stays active for a few seconds after the movement stops. Some return true when the movement stops. Mine has a delay. This can be changed, but you need some l33t soldering skills, or one with jumpers. 
+
+## Parts
+This project makes use of an Arduino UNO, but can be used on any Arduino. I've run it on a Particle Photon as well.
+
+* 1 xPIR Motion detector sensor
+* 2 x LEDs (I used Red and Blue, as they're used as an alarm, and it reminded me of a cop car)
+* 2 x 220ohm resistors
+* 1 x Pizzo buzzer
+* 1 x Breadboard (I didn mine on a half size)
+* Around 10 jumper wires.
+
+## Wiring it up
+The while thing sits on a bradboard, with the sensor hanging lose, so that it can be moved around. I'd put longer leads on the PIR, which allows it to be moved independently of the board.
+
+I use the following pins:
+
+* Buzzer: A0
+* LED 1: 10
+* LED 2: 9
+* PIR: 4
+
+### The Sketch.
+
+![alt text](https://i.ibb.co/CHRChKH/Motion-Sensor-No-Screen-bb.jpg "High quality")
