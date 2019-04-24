@@ -11,9 +11,10 @@ Note: my PIR sensor is set that, when there's movement, it stays active for a fe
 This project makes use of an Arduino UNO, but can be used on any Arduino. I've run it on a Particle Photon as well.
 
 * 1 xPIR Motion detector sensor
-* 2 x LEDs (I used Red and Blue, as they're used as an alarm, and it reminded me of a cop car)
-* 2 x 220ohm resistors
+* 3 x LEDs (I used Red and Blue, as they're used as an alarm, and it reminded me of a cop car, and one for the 'Silent' mode)
+* 3 x 220ohm resistors
 * 1 x Pizzo buzzer
+* 1 x toggle button
 * 1 x Breadboard (I didn mine on a half size)
 * Around 10 jumper wires.
 
