@@ -2,13 +2,14 @@
 #include "FadingLED.h"
 
 // Pins being used by devices.
-int LED1_PIN =          10;
-int LED2_PIN =          9;
-int PIR_PIN =           4;
-int BUZZER_PIN =        A0;
+int LED1_PIN =          0;
+int LED2_PIN =          1;
 int SILENT_LED_PIN =    2;
-int SILENT_BUTTON_PIN = 3; // Interrupt pin on UNO so....
-int SILENT_BOTTON_INTERRUPT = 1; // Pin 3 = Interrupt 1. If using Pin 2, then Interrupt is 0.
+int PIR_PIN =           3;
+int BUZZER_PIN =        A5;
+int SILENT_BUTTON_PIN = 4; // Interrupt pin on UNO so....
+int SILENT_BOTTON_INTERRUPT = SILENT_BUTTON_PIN; // Pin 3 = Interrupt 1. If using Pin 2, then Interrupt is 0.
+int PIR_INTERRUPT = PIR_PIN; 
 
 // Instantiate the objects
 FadingLED   LED_1;
@@ -16,7 +17,7 @@ FadingLED   LED_2;
 Buzzer      buzzer;
 
 // Setup global variables.
-bool AllStill           = true;
+volatile bool AllStill  = true;
 volatile bool isSilent  = false; // Store if the board is in silent state. Also, volatile as it's handled via an ISR
 
 void setup() {
@@ -33,26 +34,10 @@ void setup() {
 
     // Setup an Interrupt for the Button.
     attachInterrupt(SILENT_BOTTON_INTERRUPT, handleButtonStateISR, RISING); // Attach an Interrup to the button press pin.
+    attachInterrupt(PIR_INTERRUPT, handleMovementISR, CHANGE);
 
     // Quick Hello!
     SayHello(5);   
-}
-
-/*
- * Method to test of movement has been detected.
- */
-bool CheckMovement() {
-    // Read the pin value.
-    int val = digitalRead(PIR_PIN);
-    
-    // Has a new movement been detected?
-    if(val==true && AllStill==true) {
-        if(isSilent==false)
-          buzzer.Beep(160, 1500);
-        AllStill = false;
-    } 
-    AllStill = !val; // All still is false if we have movement.
-    return val != 0;    
 }
 
 /*
@@ -60,34 +45,52 @@ bool CheckMovement() {
  */
 void SayHello(int flashes) {
     int i = 0;
-    tone(BUZZER_PIN, 4000);
     
     while(i < flashes) {
       i++;     
+      tone(BUZZER_PIN, 4000);
       digitalWrite(LED1_PIN, HIGH);
       digitalWrite(LED2_PIN, HIGH);
       digitalWrite(SILENT_LED_PIN, HIGH);
-      delay(30);
+      delay(20);
       noTone(BUZZER_PIN);
       digitalWrite(LED1_PIN, LOW);
       digitalWrite(LED2_PIN, LOW);
       digitalWrite(SILENT_LED_PIN, LOW);
-      delay(30);
+      delay(20);
     }
 }
 
 void loop() {
-   // Check for moment.
-    bool val = CheckMovement();
     // Update connected devices.
-    LED_1.Update(val);
-    LED_2.Update(val);
+    LED_1.Update(AllStill==false);
+    LED_2.Update(AllStill==false);
     buzzer.Update();
     digitalWrite(SILENT_LED_PIN, isSilent);
 }
+
 /*
  * ISR - Togle the silent mode.
  */
 void handleButtonStateISR() {
-  isSilent = !isSilent;
+//    Particle.publish("EVENT", "Button pressed", PUBLIC);    
+ 
+    isSilent = !isSilent;
+    if(isSilent == false)
+        buzzer.Beep(30, 1500);
+ 
+}
+
+/*
+    ISR to monitor movement PIR for any changes in state.
+*/
+void handleMovementISR() {
+    int PIRValue = digitalRead(PIR_PIN);
+    // If we went from a still state, and detected a movement...
+    if(AllStill && PIRValue) {
+        if(isSilent==false) {
+            buzzer.Beep(160, 1500);
+        }
+    } 
+    AllStill = PIRValue==LOW; // All still is false if we have movement.
 }
