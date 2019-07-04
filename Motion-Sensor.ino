@@ -12,8 +12,8 @@ int SILENT_BOTTON_INTERRUPT = SILENT_BUTTON_PIN; // Pin 3 = Interrupt 1. If usin
 int PIR_INTERRUPT = PIR_PIN; 
 
 // Instantiate the objects
-FadingLed   LED_1;
-FadingLed   LED_2;
+FadingLed   LED_1();
+FadingLed   LED_2();
 Buzzer      buzzer;
 
 // Setup global variables.
@@ -23,9 +23,9 @@ volatile bool isSilent  = false; // Store if the board is in silent state. Also,
 void setup() {
    
     // Initialise the two LEDs and the Buzzer.
-    LED_1.Init(LED1_PIN, 500, 0, false);
-    LED_2.Init(LED2_PIN, 500, 250, false);
-    buzzer.Init(BUZZER_PIN);
+    LED_1.Setup(LED1_PIN, 500, 0, false);
+    LED_2.Setup(LED2_PIN, 500, 250, false);
+    buzzer.Setup(BUZZER_PIN);
 
     // Set the PIR, Silent LED indicator and the Silent button pin mode.
     pinMode(PIR_PIN, INPUT);
